@@ -2,12 +2,25 @@ package main
 
 import (
 	"chenyh.com/go_web/router"
+	"fmt"
 	"github.com/gin-gonic/gin"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 	"log"
 )
 
-
 func main() {
+
+	// refer https://github.com/go-sql-driver/mysql#dsn-data-source-name for details
+	dsn := "root:123456@tcp(127.0.0.1:3306)/web?charset=utf8mb4"
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+
+	if err != nil {
+		log.Print("DB connect error", err)
+		return
+	}
+
+	fmt.Print(db, err)
 
 	r := gin.Default()
 
@@ -16,7 +29,6 @@ func main() {
 			"message": "pong",
 		})
 	})
-
 
 	router.InitUserRouter(r)
 
